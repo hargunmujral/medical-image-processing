@@ -8,6 +8,7 @@ IMAGE_TYPES = ('ADC', 'DWI', 'Ktrans', 'T2w', 'CDIs')
 
 class LesionDataset:
     """Main dataset class for PROSTATEx/PROSTATEx-2"""
+
     def __init__(self, data_dir):
         """
         Parameters
@@ -51,8 +52,10 @@ class LesionDataset:
             params_file = os.path.join(patient_dir, 'params.json')
             with open(params_file, 'r') as f:
                 params = json.load(f)
-            spacings = {key: np.array(val) for key, val in params['spacings'].items()}
-            world_matrices = {key: np.array(val) for key, val in params['world_matrices'].items()}
+            spacings = {key: np.array(val)
+                        for key, val in params['spacings'].items()}
+            world_matrices = {key: np.array(
+                val) for key, val in params['world_matrices'].items()}
             bvals = np.array(params['b_vals'])
 
             self._data_dict[patient_id] = {
@@ -167,9 +170,9 @@ class Patient:
 
 if __name__ == '__main__':
     import matplotlib.pyplot as plt
-    from data.PreparedPROSTATExDataset.utils import plot_mask
+    from utils import plot_mask
 
-    data_dir = 'F:\\Datasets\\PROSTATEx\\final_dataset_full_vol_final\\data'
+    data_dir = 'data'
     query_patient = 'ProstateX-0011'
     slice_index = 11
 
@@ -178,7 +181,8 @@ if __name__ == '__main__':
 
     adc, adc_prost_mask, adc_mask = patient.slice_data('ADC', slice_index)
     t2w, t2w_prost_mask, t2w_mask = patient.slice_data('T2w', slice_index)
-    ktrans, ktrans_prost_mask, ktrans_mask = patient.slice_data('Ktrans', slice_index)
+    ktrans, ktrans_prost_mask, ktrans_mask = patient.slice_data(
+        'Ktrans', slice_index)
     cdis, cdis_prost_mask, cdis_mask = patient.slice_data('CDIs', slice_index)
 
     _, ax = plt.subplots(2, 2)
@@ -200,10 +204,14 @@ if __name__ == '__main__':
     plot_mask(ax[3], cdis_mask, color='r', linestyle='-')
     ax[3].set_title('CDIs')
 
-    adc, adc_prost_mask, adc_mask = patient.slice_data('ADC', slice_index, crop_to_mask=True)
-    t2w, t2w_prost_mask, t2w_mask = patient.slice_data('T2w', slice_index, crop_to_mask=True)
-    ktrans, ktrans_prost_mask, ktrans_mask = patient.slice_data('Ktrans', slice_index, crop_to_mask=True)
-    cdis, cdis_prost_mask, cdis_mask = patient.slice_data('CDIs', slice_index, crop_to_mask=True)
+    adc, adc_prost_mask, adc_mask = patient.slice_data(
+        'ADC', slice_index, crop_to_mask=True)
+    t2w, t2w_prost_mask, t2w_mask = patient.slice_data(
+        'T2w', slice_index, crop_to_mask=True)
+    ktrans, ktrans_prost_mask, ktrans_mask = patient.slice_data(
+        'Ktrans', slice_index, crop_to_mask=True)
+    cdis, cdis_prost_mask, cdis_mask = patient.slice_data(
+        'CDIs', slice_index, crop_to_mask=True)
 
     _, ax = plt.subplots(2, 2)
     ax = ax.ravel()
